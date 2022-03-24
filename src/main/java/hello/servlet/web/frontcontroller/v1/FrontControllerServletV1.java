@@ -13,25 +13,28 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-@WebServlet(name = "frontControllerServletV1", urlPatterns = "/front-controller/v1/*")
+@WebServlet(name = "frontcontrollerServletV1", urlPatterns = "/front-controller/v1/*")
 public class FrontControllerServletV1 extends HttpServlet {
 
-    private Map<String, ControllerV1> controllerMap = new HashMap<>();
+    private Map<String, ControllerV1> controllerV1Map = new HashMap<>();
 
     public FrontControllerServletV1() {
-        controllerMap.put("/front-controller/v1/members", new MemberListControllerV1());
-        controllerMap.put("/front-controller/v1/members/save", new MemberSaveControllerV1());
-        controllerMap.put("/front-controller/v1/members/new-form", new MemberFormControllerV1());
+        controllerV1Map.put("/front-controller/v1/members/new-form", new MemberFormControllerV1());
+        controllerV1Map.put("/front-controller/v1/members/save", new MemberSaveControllerV1());
+        controllerV1Map.put("/front-controller/v1/members", new MemberListControllerV1());
     }
 
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("FrontControllerServletV1.service");
-        ControllerV1 controller = controllerMap.get(request.getRequestURI());
-        if(controller == null) {
+        System.out.println(request.getRequestURI());
+        ControllerV1 controller = controllerV1Map.get(request.getRequestURI());
+        if (controller == null) {
+            System.out.println("controller = " + controller);
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
+        System.out.println("controller = " + controller);
         controller.process(request, response);
     }
 }
